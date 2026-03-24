@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポータルページ</title>
+    <style>
+        /* 全体のレイアウト設定 */
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f7f6;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* ボタンの共通デザイン */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* ボタン同士の間隔 */
+        }
+
+        .custom-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff; /* ボタンの色 */
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            text-align: center;
+            min-width: 200px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* マウスを乗せた時の動き */
+        .custom-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* クリックした瞬間の動き */
+        .custom-button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>プロジェクトを選択してください</h1>
+
+    <div class="btn-container">
+        <a href="https://paapaaseizin.github.io/paapaakeiji" class="custom-button">PaaPaaKeiji</a>
+        <a href="https://paapaaseizin.github.io/bench-web" class="custom-button">ベータ Benchmark Web</a>
+        </div>
+
+</body>
+</html>
