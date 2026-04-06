@@ -2,68 +2,356 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ポータルページ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Paa Site NEXT | ガジェット趣味の領土</title>
+    <!-- Google Fonts & リセットCSS -->
     <style>
-        /* 全体のレイアウト設定 */
-        body {
-            font-family: "Helvetica Neue", Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        * {
             margin: 0;
-            background-color: #f4f7f6;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
+        body {
+            background: #0b0e16;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            color: #eef2ff;
+            line-height: 1.5;
+            padding: 1.5rem;
         }
 
-        /* ボタンの共通デザイン */
-        .btn-container {
+        /* アニメーション背景 (ガジェットがゆるりと漂う) */
+        .gadget-dust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .dust-icon {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0.12;
+            animation: floatDust linear infinite;
+            user-select: none;
+        }
+
+        @keyframes floatDust {
+            0% { transform: translateX(-10vw) translateY(0px) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.2; }
+            85% { opacity: 0.15; }
+            100% { transform: translateX(110vw) translateY(40px) rotate(360deg); opacity: 0; }
+        }
+
+        /* メインコンテンツエリア */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ヘッダー / SNSバー */
+        .top-bar {
             display: flex;
-            flex-direction: column;
-            gap: 15px; /* ボタン同士の間隔 */
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: rgba(15, 20, 30, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 0.6rem 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
         }
 
-        .custom-button {
-            display: inline-block;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #fff;
-            background-color: #007bff; /* ボタンの色 */
+        .site-title {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: linear-gradient(120deg, #fff, #0ff, #c0f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .social-icon {
+            color: #b4d0ff;
             text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.3s, transform 0.2s;
-            text-align: center;
-            min-width: 200px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0,255,255,0.2);
         }
 
-        /* マウスを乗せた時の動き */
-        .custom-button:hover {
-            background-color: #0056b3;
+        .social-icon:hover {
+            background: #0ff22a10;
+            border-color: #0ff;
+            color: #0ff;
             transform: translateY(-2px);
         }
 
-        /* クリックした瞬間の動き */
-        .custom-button:active {
-            transform: translateY(0);
+        /* 主人公プロフィールカード風 */
+        .hero {
+            background: linear-gradient(145deg, #101520, #080c14);
+            border-radius: 2rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            box-shadow: 0 20px 35px -12px black;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge-sony {
+            background: #000000aa;
+            backdrop-filter: blur(4px);
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            border-left: 3px solid #0ff;
+        }
+
+        /* ガジェットグリッド (あなたの「布陣」を再現) */
+        .section-title {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            border-left: 5px solid #0ff;
+            padding-left: 1rem;
+        }
+
+        .gadget-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .gadget-card {
+            background: rgba(18, 24, 36, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+        }
+
+        .gadget-card:hover {
+            border-color: #0ff;
+            transform: translateY(-5px);
+            background: rgba(25, 35, 55, 0.85);
+        }
+
+        .gadget-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .device-icon {
+            font-size: 1.9rem;
+        }
+
+        .spec {
+            color: #9aaec9;
+            font-size: 0.85rem;
+            margin: 0.75rem 0;
+            border-top: 1px dashed #2a3a55;
+            padding-top: 0.7rem;
+        }
+
+        .comment {
+            font-size: 0.92rem;
+            margin-top: 0.6rem;
+            color: #cbddf5;
+        }
+
+        .price-tag {
+            display: inline-block;
+            background: #0ff11a;
+            color: #010101;
+            font-weight: bold;
+            border-radius: 20px;
+            padding: 0.15rem 0.7rem;
+            font-size: 0.7rem;
+            margin-right: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            border-top: 1px solid #1f2a3e;
+            padding: 2rem 0.5rem;
+            font-size: 0.8rem;
+            color: #7f8aa4;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .top-bar { flex-direction: column; align-items: stretch; border-radius: 2rem; }
+            .social-links { justify-content: center; }
+            .hero h1 { font-size: 1.6rem; }
+            .gadget-name { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
+<div class="gadget-dust" id="dustLayer"></div>
 
-    <h1>プロジェクトを選択してください</h1>
-
-    <div class="btn-container">
-        <a href="https://paapaaseizin.github.io/paapaakeiji" class="custom-button">PaaPaaKeiji</a>
-        <a href="https://paapaaseizin.github.io/bench-web" class="custom-button">ベータ Benchmark Web</a>
+<div class="container">
+    <div class="top-bar">
+        <div class="site-title">📡 Paa Site · ガジェット領土</div>
+        <div class="social-links">
+            <a href="https://www.youtube.com/@paapaaseizin" target="_blank" class="social-icon" rel="noopener noreferrer">
+                ▶️ YouTube
+            </a>
+            <a href="https://twitter.com/_TOUKETUSINAIDE" target="_blank" class="social-icon" rel="noopener noreferrer">
+                🐦 X (Twitter)
+            </a>
         </div>
+    </div>
 
+    <!-- ボタンエリア（2つのリダイレクトボタン） -->
+<div class="redirect-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0 1rem;">
+    <a href="https://sites.google.com/view/paapaakeiji" target="_blank" rel="noopener noreferrer" class="redirect-btn" style="background: linear-gradient(135deg, #1a2a3a, #0f1a24); border: 1px solid #ffaa44; color: #ffdd99; padding: 0.8rem 1.8rem; border-radius: 60px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; backdrop-filter: blur(4px);">
+        📋 掲示板に行く
+    </a>
+    <a href="https://sites.google.com/view/paapaalab" target="_blank" rel="noopener noreferrer" class="redirect-btn" style="background: linear-gradient(135deg, #1a2a3a, #0f1a24); border: 1px solid #0ff; color: #aaffff; padding: 0.8rem 1.8rem; border-radius: 60px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; backdrop-filter: blur(4px);">
+        🧪 実験場に行く
+    </a>
+</div>
+
+<style>
+    .redirect-btn:hover {
+        transform: translateY(-3px);
+        filter: brightness(1.05);
+        box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+    }
+    /* スマホでの見やすさ調整 */
+    @media (max-width: 600px) {
+        .redirect-buttons { gap: 0.8rem; }
+        .redirect-btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+    }
+</style>
+
+    <div class="hero">
+        <h1>🧙 ソニー信者・ガジェット多頭飼い <span class="badge-sony">📱 Xperia 1Ⅲ 主力</span></h1>
+        <p style="margin-top: 0.8rem;">「geminiで生成した馬具もあるけど許してね。メモリとSSD買い占めるのだけはやめて。」</p>
+        <p style="font-size:0.85rem; margin-top:0.5rem;">⬆ スマホは横向き推奨 / ガジェットがゆる〜り流れるアニメーション付き</p>
+    </div>
+
+    <div class="section-title">🔧 現在のガジェット環境（布陣）</div>
+    <div class="gadget-grid" id="gadgetGrid"></div>
+
+    <div class="section-title">⚡ 自作PC (７万の奇跡)</div>
+    <div class="gadget-grid" id="pcGrid"></div>
+
+    <footer>
+        <p>© 2025 Paa Site NEXT — ガジェットで遊ぶ日々。 | ページはAI＋手作業でリスペクト生成<br>
+        Twitter, YouTube リンクはクリックで別タブ開くよ</p>
+    </footer>
+</div>
+
+<script>
+    // ----- あなたのサイトのガジェット情報を完全再現 + ちょっと遊び心 -----
+    const gadgets = [
+        { name: "Xperia 1Ⅲ (XQ-BC42)", icon: "📱", desc: "メインスマホ。SIMフリー512GB。限定グリーン。ソニータイマー爆発前にvivo/oppo探し中。", specs: "Snapdragon 888 / 4K 120Hz / メモリ12GB" },
+        { name: "iPhone 16e", icon: "🍎", desc: "残クレで入手。強制サブ機。LINE自動送信とか便利ツールとして活躍。", specs: "A18 / USB-C / 動作は安定" },
+        { name: "Galaxy S10", icon: "🤖", desc: "貰い物サブ機兼おもちゃ。背面透明にしようとして削って割った。855搭載でまだまだ戦える。バッテリーは課題。", specs: "Root化済 / 遊び心満載" },
+        { name: "NEX-6 + SELP1650", icon: "📷", desc: "初カメラ。中古4万のソニーミラーレス。暗所は弱いけど雰囲気最高。電動ズームレンズ持ち運び便利。", specs: "24-70mm相当 / APS-C / 小型" },
+        { name: "ULT FIELD 1", icon: "🔊", desc: "アクティブスピーカー。低音良し。モノラルなのが残念だけど音質は良い。", specs: "防水 / 12時間再生 / モノラル" },
+        { name: "YUNZII YZ75", icon: "⌨️", desc: "KAWAII系キーボード。側面も光ってかっこいい。キーキャップはeyoosoから流用。", specs: "メカニカル / RGB / おしゃれ" }
+    ];
+
+    const pcData = {
+        name: "⚡ 自作PC (総額７万円の奇跡)", icon: "🖥️",
+        desc: "Ryzen7 5700X + RTX2070Super。メモリはDDR4 3200 16GB。SSD NVMe 1TB。玄人志向650W。ZALMANケース。\n「CPUの割にGPU弱くね？でもギリ4060に劣らないし7万だからセーフ。LEDはダイソー550円（レインボー）」",
+        specs: "5700X / 2070S / A520M-HDV / メモリ16GB / 電源650W"
+    };
+
+    function renderGadgets() {
+        const grid = document.getElementById('gadgetGrid');
+        if(!grid) return;
+        grid.innerHTML = '';
+        gadgets.forEach(g => {
+            const card = document.createElement('div');
+            card.className = 'gadget-card';
+            card.innerHTML = `
+                <div class="gadget-name">
+                    <span>${g.icon} ${g.name}</span>
+                </div>
+                <div class="comment">📝 ${g.desc}</div>
+                <div class="spec">🔧 ${g.specs}</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function renderPC() {
+        const pcContainer = document.getElementById('pcGrid');
+        if(!pcContainer) return;
+        const card = document.createElement('div');
+        card.className = 'gadget-card';
+        card.innerHTML = `
+            <div class="gadget-name">
+                <span>${pcData.icon} ${pcData.name}</span>
+            </div>
+            <div class="comment">${pcData.desc.replace(/\n/g,'<br>')}</div>
+            <div class="spec">⚙️ ${pcData.specs}</div>
+            <div style="margin-top:10px;"><span class="price-tag">💰 総額7万円</span> LEDはダイソー550円</div>
+        `;
+        pcContainer.appendChild(card);
+    }
+
+    // ガジェット浮遊アニメーション追加（あなたのサイトの「流れる」を強化）
+    function createDust() {
+        const dustContainer = document.getElementById('dustLayer');
+        const icons = ['📱', '💻', '⌚', '🎧', '📷', '🕶️', '⌨️', '🖱️', '🔊', '🤖', '📡', '🎮', '💾'];
+        for(let i=0;i<26;i++) {
+            const el = document.createElement('div');
+            el.className = 'dust-icon';
+            const randIcon = icons[Math.floor(Math.random() * icons.length)];
+            el.innerText = randIcon;
+            const size = Math.random() * 1.5 + 1.2;
+            el.style.fontSize = `${size}rem`;
+            el.style.top = `${Math.random() * 100}%`;
+            el.style.left = `${Math.random() * 20 - 10}%`;
+            const duration = Math.random() * 18 + 12;
+            el.style.animationDuration = `${duration}s`;
+            el.style.animationDelay = `${Math.random() * 10}s`;
+            dustContainer.appendChild(el);
+        }
+    }
+
+    renderGadgets();
+    renderPC();
+    createDust();
+</script>
 </body>
 </html>
