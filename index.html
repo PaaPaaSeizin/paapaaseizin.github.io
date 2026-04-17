@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Paa Site NEXT | ガジェット趣味の領土</title>
-    <!-- Google Fonts & リセットCSS -->
     <style>
         * {
             margin: 0;
@@ -133,7 +132,7 @@
             border-left: 3px solid #0ff;
         }
 
-        /* ガジェットグリッド (あなたの「布陣」を再現) */
+        /* セクションタイトル */
         .section-title {
             font-size: 1.8rem;
             margin: 2rem 0 1rem;
@@ -141,66 +140,81 @@
             padding-left: 1rem;
         }
 
-        .gadget-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.8rem;
+        /* ========== リスト形式（布陣） ========== */
+        .gadget-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
             margin-bottom: 2rem;
         }
 
-        .gadget-card {
+        .gadget-list-item {
             background: rgba(18, 24, 36, 0.7);
             backdrop-filter: blur(8px);
-            border-radius: 32px;
-            padding: 1.5rem;
+            border-radius: 24px;
+            padding: 1.2rem 1.5rem;
             border: 1px solid rgba(0, 255, 255, 0.2);
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .gadget-card:hover {
+        .gadget-list-item:hover {
             border-color: #0ff;
-            transform: translateY(-5px);
             background: rgba(25, 35, 55, 0.85);
+            transform: translateX(4px);
+        }
+
+        .gadget-icon {
+            font-size: 2.2rem;
+            min-width: 3rem;
+            text-align: center;
+        }
+
+        .gadget-info {
+            flex: 2;
+            min-width: 180px;
         }
 
         .gadget-name {
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
-        .device-icon {
-            font-size: 1.9rem;
-        }
-
-        .spec {
-            color: #9aaec9;
+        .gadget-desc {
             font-size: 0.85rem;
-            margin: 0.75rem 0;
-            border-top: 1px dashed #2a3a55;
-            padding-top: 0.7rem;
+            color: #cbddf5;
+            margin-bottom: 0.3rem;
         }
 
-        .comment {
-            font-size: 0.92rem;
-            margin-top: 0.6rem;
-            color: #cbddf5;
+        .gadget-specs {
+            font-size: 0.75rem;
+            color: #9aaec9;
+            font-family: monospace;
         }
 
         .price-tag {
-            display: inline-block;
             background: #0ff11a;
             color: #010101;
             font-weight: bold;
             border-radius: 20px;
-            padding: 0.15rem 0.7rem;
+            padding: 0.2rem 0.7rem;
             font-size: 0.7rem;
-            margin-right: 0.5rem;
+            white-space: nowrap;
+        }
+
+        /* スマホ向け調整 */
+        @media (max-width: 600px) {
+            .gadget-list-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .gadget-icon {
+                align-self: center;
+            }
         }
 
         footer {
@@ -212,12 +226,164 @@
             color: #7f8aa4;
         }
 
-        @media (max-width: 700px) {
-            body { padding: 1rem; }
-            .top-bar { flex-direction: column; align-items: stretch; border-radius: 2rem; }
-            .social-links { justify-content: center; }
-            .hero h1 { font-size: 1.6rem; }
-            .gadget-name { font-size: 1.3rem; }
+        /* リダイレクトボタンのホバー */
+        .redirect-btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+        @media (max-width: 600px) {
+            .redirect-buttons { gap: 0.8rem; }
+            .redirect-btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+        }
+
+        /* ========== スクロール連動 スマホ分解アニメーション ========== */
+        .phone-teardown-section {
+            margin: 4rem 0 6rem;
+            position: relative;
+            background: linear-gradient(180deg, rgba(10,15,25,0.5), rgba(5,8,15,0.8));
+            border-radius: 48px;
+            padding: 3rem 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        .section-label {
+            text-align: center;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: #0ff;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        .teardown-container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 550px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .phone-layer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.05s linear;
+            will-change: transform, opacity;
+            text-align: center;
+        }
+        .layer-screen { top: 20%; z-index: 5; }
+        .screen-box {
+            background: linear-gradient(145deg, #1a2a4a, #0a1020);
+            width: 220px;
+            height: 380px;
+            border-radius: 32px;
+            border: 2px solid #0ff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        .screen-display {
+            background: linear-gradient(135deg, #0ff22a, #2a6fff);
+            width: 90%;
+            height: 70%;
+            margin: 15% auto;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .layer-frame { top: 20%; z-index: 4; }
+        .frame-box {
+            background: rgba(80, 90, 110, 0.7);
+            width: 232px;
+            height: 392px;
+            border-radius: 36px;
+            border: 3px solid #8899aa;
+        }
+        .layer-motherboard { top: 20%; z-index: 3; }
+        .mb-box {
+            background: #1a3a2a;
+            width: 180px;
+            height: 200px;
+            border-radius: 12px;
+            border: 1px solid #0f0;
+            box-shadow: 0 0 12px rgba(0, 255, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .chip {
+            background: #2a4a3a;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            border: 1px solid #0f0;
+        }
+        .chip-text { font-size: 8px; color: #0f0; }
+        .layer-back { top: 20%; z-index: 2; }
+        .back-box {
+            background: linear-gradient(145deg, #2a6a5a, #1a4a3a);
+            width: 230px;
+            height: 390px;
+            border-radius: 34px;
+            border: 2px solid #0fa;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 20px;
+        }
+        .camera-lens {
+            background: #111;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            border: 2px solid #0fa;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .layer-complete { top: 20%; z-index: 10; }
+        .complete-box {
+            background: linear-gradient(145deg, #2a3a5a, #1a2a3a);
+            width: 230px;
+            height: 400px;
+            border-radius: 36px;
+            border: 2px solid #ffaa44;
+            box-shadow: 0 0 30px rgba(255, 170, 68, 0.4);
+            position: relative;
+        }
+        .complete-screen {
+            background: linear-gradient(135deg, #0ff, #a0f);
+            width: 88%;
+            height: 70%;
+            margin: 12% auto;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .complete-brand {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: #ffaa44;
+        }
+        .scroll-indicator {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #6a7a9a;
+        }
+        @media (max-width: 600px) {
+            .screen-box, .frame-box, .back-box, .complete-box { transform: scale(0.8); }
+            .mb-box { transform: scale(0.8); }
+            .teardown-container { min-height: 450px; }
         }
     </style>
 </head>
@@ -228,37 +394,16 @@
     <div class="top-bar">
         <div class="site-title">📡 Paa Site · ガジェット領土</div>
         <div class="social-links">
-            <a href="https://www.youtube.com/@paapaaseizin" target="_blank" class="social-icon" rel="noopener noreferrer">
-                ▶️ YouTube
-            </a>
-            <a href="https://twitter.com/_TOUKETUSINAIDE" target="_blank" class="social-icon" rel="noopener noreferrer">
-                🐦 X (Twitter)
-            </a>
+            <a href="https://www.youtube.com/@paapaaseizin" target="_blank" class="social-icon">▶️ YouTube</a>
+            <a href="https://twitter.com/_TOUKETUSINAIDE" target="_blank" class="social-icon">🐦 X (Twitter)</a>
         </div>
     </div>
 
-    <!-- ボタンエリア（2つのリダイレクトボタン） -->
-<div class="redirect-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0 1rem;">
-    <a href="https://sites.google.com/view/paapaakeiji" target="_blank" rel="noopener noreferrer" class="redirect-btn" style="background: linear-gradient(135deg, #1a2a3a, #0f1a24); border: 1px solid #ffaa44; color: #ffdd99; padding: 0.8rem 1.8rem; border-radius: 60px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; backdrop-filter: blur(4px);">
-        📋 掲示板に行く
-    </a>
-    <a href="https://sites.google.com/view/paapaalab" target="_blank" rel="noopener noreferrer" class="redirect-btn" style="background: linear-gradient(135deg, #1a2a3a, #0f1a24); border: 1px solid #0ff; color: #aaffff; padding: 0.8rem 1.8rem; border-radius: 60px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; backdrop-filter: blur(4px);">
-        🧪 実験場に行く
-    </a>
-</div>
-
-<style>
-    .redirect-btn:hover {
-        transform: translateY(-3px);
-        filter: brightness(1.05);
-        box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
-    }
-    /* スマホでの見やすさ調整 */
-    @media (max-width: 600px) {
-        .redirect-buttons { gap: 0.8rem; }
-        .redirect-btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-    }
-</style>
+    <!-- リダイレクトボタン -->
+    <div class="redirect-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0 1rem;">
+        <a href="https://sites.google.com/view/paapaakeiji" target="_blank" class="redirect-btn" style="background: linear-gradient(135deg, #1a2a3a, #0f1a24); border: 1px solid #ffaa44; color: #ffdd99; padding: 0.8rem 1.8rem; border-radius: 60px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 0.5rem; backdrop-filter: blur(4px);">📋 掲示板に行く</a>
+        <a href="https://sites.google.com/view/paapaalab" target="_blank" class="redirect-btn" style="background: linear-gradient(135deg, #1a2a3a, #0f1a24); border: 1px solid #0ff; color: #aaffff; padding: 0.8rem 1.8rem; border-radius: 60px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 0.5rem; backdrop-filter: blur(4px);">🧪 実験場に行く</a>
+    </div>
 
     <div class="hero">
         <h1>🧙 ソニー信者・ガジェット多頭飼い <span class="badge-sony">📱 Xperia 1Ⅲ 主力</span></h1>
@@ -266,20 +411,33 @@
         <p style="font-size:0.85rem; margin-top:0.5rem;">⬆ スマホは横向き推奨 / ガジェットがゆる〜り流れるアニメーション付き</p>
     </div>
 
+    <!-- 布陣：リスト形式 -->
     <div class="section-title">🔧 現在のガジェット環境（布陣）</div>
-    <div class="gadget-grid" id="gadgetGrid"></div>
+    <div id="gadgetList" class="gadget-list"></div>
 
     <div class="section-title">⚡ 自作PC (７万の奇跡)</div>
-    <div class="gadget-grid" id="pcGrid"></div>
+    <div id="pcList" class="gadget-list"></div>
+
+    <!-- スクロール連動アニメーションセクション（ページを下に伸ばす） -->
+    <div class="phone-teardown-section">
+        <div class="section-label">🔧 SCROLL TO ASSEMBLE 🔧</div>
+        <div class="teardown-container" id="teardownContainer">
+            <div class="phone-layer layer-screen" id="layerScreen"><div class="screen-box"><div class="screen-display">📱</div></div></div>
+            <div class="phone-layer layer-frame" id="layerFrame"><div class="frame-box"></div></div>
+            <div class="phone-layer layer-motherboard" id="layerMotherboard"><div class="mb-box"><div class="chip"></div><div class="chip"></div><div class="chip-text">Snapdragon</div><div class="chip-text">8 Gen 4</div></div></div>
+            <div class="phone-layer layer-back" id="layerBack"><div class="back-box"><div class="camera-lens"></div><div class="camera-lens"></div><div class="camera-lens"></div></div></div>
+            <div class="phone-layer layer-complete" id="layerComplete"><div class="complete-box"><div class="complete-screen">✨ XPERIA ✨</div><div class="complete-brand">Sony | Xperia 1 VI</div></div></div>
+        </div>
+        <div class="scroll-indicator" id="scrollValue">↓ スクロールで組み立て進行中 ↓</div>
+    </div>
 
     <footer>
-        <p>© 2025 Paa Site NEXT — ガジェットで遊ぶ日々。 | ページはAI＋手作業でリスペクト生成<br>
-        Twitter, YouTube リンクはクリックで別タブ開くよ</p>
+        <p>© 2025 Paa Site NEXT — ガジェットで遊ぶ日々。 | ページはAI＋手作業でリスペクト生成<br>Twitter, YouTube リンクはクリックで別タブ開くよ</p>
     </footer>
 </div>
 
 <script>
-    // ----- あなたのサイトのガジェット情報を完全再現 + ちょっと遊び心 -----
+    // ガジェットデータ
     const gadgets = [
         { name: "Xperia 1Ⅲ (XQ-BC42)", icon: "📱", desc: "メインスマホ。SIMフリー512GB。限定グリーン。ソニータイマー爆発前にvivo/oppo探し中。", specs: "Snapdragon 888 / 4K 120Hz / メモリ12GB" },
         { name: "iPhone 16e", icon: "🍎", desc: "残クレで入手。強制サブ機。LINE自動送信とか便利ツールとして活躍。", specs: "A18 / USB-C / 動作は安定" },
@@ -289,69 +447,158 @@
         { name: "YUNZII YZ75", icon: "⌨️", desc: "KAWAII系キーボード。側面も光ってかっこいい。キーキャップはeyoosoから流用。", specs: "メカニカル / RGB / おしゃれ" }
     ];
 
-    const pcData = {
-        name: "⚡ 自作PC (総額７万円の奇跡)", icon: "🖥️",
-        desc: "Ryzen7 5700X + RTX2070Super。メモリはDDR4 3200 16GB。SSD NVMe 1TB。玄人志向650W。ZALMANケース。\n「CPUの割にGPU弱くね？でもギリ4060に劣らないし7万だからセーフ。LEDはダイソー550円（レインボー）」",
-        specs: "5700X / 2070S / A520M-HDV / メモリ16GB / 電源650W"
+    const pcItem = {
+        name: "自作PC (総額７万円の奇跡)",
+        icon: "🖥️",
+        desc: "Ryzen7 5700X + RTX2070Super。メモリDDR4 3200 16GB。SSD NVMe 1TB。玄人志向650W。ZALMANケース。CPUの割にGPU弱くね？でもギリ4060に劣らないし7万だからセーフ。",
+        specs: "5700X / 2070S / A520M-HDV / メモリ16GB / 電源650W",
+        price: "総額7万円"
     };
 
-    function renderGadgets() {
-        const grid = document.getElementById('gadgetGrid');
-        if(!grid) return;
-        grid.innerHTML = '';
-        gadgets.forEach(g => {
-            const card = document.createElement('div');
-            card.className = 'gadget-card';
-            card.innerHTML = `
-                <div class="gadget-name">
-                    <span>${g.icon} ${g.name}</span>
+    // リスト描画関数
+    function renderList(containerId, items, isPc = false) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '';
+        items.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'gadget-list-item';
+            div.innerHTML = `
+                <div class="gadget-icon">${item.icon}</div>
+                <div class="gadget-info">
+                    <div class="gadget-name">${item.name}</div>
+                    <div class="gadget-desc">📝 ${item.desc}</div>
+                    <div class="gadget-specs">🔧 ${item.specs}</div>
                 </div>
-                <div class="comment">📝 ${g.desc}</div>
-                <div class="spec">🔧 ${g.specs}</div>
+                ${item.price ? `<div class="price-tag">💰 ${item.price}</div>` : ''}
             `;
-            grid.appendChild(card);
+            container.appendChild(div);
         });
     }
 
-    function renderPC() {
-        const pcContainer = document.getElementById('pcGrid');
-        if(!pcContainer) return;
-        const card = document.createElement('div');
-        card.className = 'gadget-card';
-        card.innerHTML = `
-            <div class="gadget-name">
-                <span>${pcData.icon} ${pcData.name}</span>
-            </div>
-            <div class="comment">${pcData.desc.replace(/\n/g,'<br>')}</div>
-            <div class="spec">⚙️ ${pcData.specs}</div>
-            <div style="margin-top:10px;"><span class="price-tag">💰 総額7万円</span> LEDはダイソー550円</div>
-        `;
-        pcContainer.appendChild(card);
-    }
+    // 実行
+    renderList('gadgetList', gadgets);
+    renderList('pcList', [pcItem], true);
 
-    // ガジェット浮遊アニメーション追加（あなたのサイトの「流れる」を強化）
+    // 浮遊アイコン生成
     function createDust() {
         const dustContainer = document.getElementById('dustLayer');
         const icons = ['📱', '💻', '⌚', '🎧', '📷', '🕶️', '⌨️', '🖱️', '🔊', '🤖', '📡', '🎮', '💾'];
         for(let i=0;i<26;i++) {
             const el = document.createElement('div');
             el.className = 'dust-icon';
-            const randIcon = icons[Math.floor(Math.random() * icons.length)];
-            el.innerText = randIcon;
+            el.innerText = icons[Math.floor(Math.random() * icons.length)];
             const size = Math.random() * 1.5 + 1.2;
             el.style.fontSize = `${size}rem`;
             el.style.top = `${Math.random() * 100}%`;
             el.style.left = `${Math.random() * 20 - 10}%`;
-            const duration = Math.random() * 18 + 12;
-            el.style.animationDuration = `${duration}s`;
+            el.style.animationDuration = `${Math.random() * 18 + 12}s`;
             el.style.animationDelay = `${Math.random() * 10}s`;
             dustContainer.appendChild(el);
         }
     }
-
-    renderGadgets();
-    renderPC();
     createDust();
+
+    // ========== スクロール連動アニメーション ==========
+    (function() {
+        const layers = {
+            screen: document.getElementById('layerScreen'),
+            frame: document.getElementById('layerFrame'),
+            motherboard: document.getElementById('layerMotherboard'),
+            back: document.getElementById('layerBack'),
+            complete: document.getElementById('layerComplete')
+        };
+        const scrollText = document.getElementById('scrollValue');
+        
+        function initPositions() {
+            if (layers.screen) { layers.screen.style.opacity = '1'; layers.screen.style.transform = 'translateX(-50%) translateY(-80px) rotate(-5deg)'; layers.screen.style.filter = 'blur(2px)'; }
+            if (layers.frame) { layers.frame.style.opacity = '1'; layers.frame.style.transform = 'translateX(-50%) translateY(120px) rotate(3deg)'; layers.frame.style.filter = 'blur(1px)'; }
+            if (layers.motherboard) { layers.motherboard.style.opacity = '1'; layers.motherboard.style.transform = 'translateX(-50%) translateY(250px) rotate(8deg)'; layers.motherboard.style.filter = 'blur(3px)'; }
+            if (layers.back) { layers.back.style.opacity = '1'; layers.back.style.transform = 'translateX(-50%) translateY(-180px) rotate(-7deg)'; layers.back.style.filter = 'blur(2px)'; }
+            if (layers.complete) { layers.complete.style.opacity = '0'; layers.complete.style.transform = 'translateX(-50%) translateY(0px) scale(0.9)'; layers.complete.style.visibility = 'hidden'; }
+        }
+        
+        function updateTeardown() {
+            const section = document.querySelector('.phone-teardown-section');
+            if (!section) return;
+            const rect = section.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            let progress = 0;
+            if (rect.top < windowHeight && rect.bottom > 0) {
+                const startPoint = windowHeight * 0.7;
+                const endPoint = windowHeight * 0.2;
+                let rawProgress = (startPoint - rect.top) / (startPoint - endPoint);
+                progress = Math.min(1, Math.max(0, rawProgress));
+            } else if (rect.top < 0 && rect.bottom > 0) progress = 1;
+            else if (rect.top < 0 && rect.bottom < 0) progress = 1;
+            else progress = 0;
+            
+            const eased = Math.pow(progress, 1.2);
+            
+            if (layers.complete) {
+                if (eased > 0.7) {
+                    const completeProgress = (eased - 0.7) / 0.3;
+                    layers.complete.style.opacity = Math.min(1, completeProgress);
+                    layers.complete.style.visibility = 'visible';
+                    layers.complete.style.transform = `translateX(-50%) translateY(0px) scale(${0.9 + completeProgress * 0.1})`;
+                } else {
+                    layers.complete.style.opacity = '0';
+                    layers.complete.style.visibility = 'hidden';
+                }
+            }
+            
+            const screenTarget = Math.min(1, Math.max(0, (eased - 0.0) / 0.4));
+            const frameTarget = Math.min(1, Math.max(0, (eased - 0.2) / 0.4));
+            const mbTarget = Math.min(1, Math.max(0, (eased - 0.4) / 0.4));
+            const backTarget = Math.min(1, Math.max(0, (eased - 0.6) / 0.3));
+            
+            if (layers.screen) {
+                const yOffset = -80 * (1 - screenTarget);
+                const rot = -5 * (1 - screenTarget);
+                const blurVal = 2 * (1 - screenTarget);
+                layers.screen.style.transform = `translateX(-50%) translateY(${yOffset}px) rotate(${rot}deg)`;
+                layers.screen.style.filter = `blur(${blurVal}px)`;
+                layers.screen.style.opacity = 1 - (screenTarget * 0.3);
+            }
+            if (layers.frame) {
+                const yOffset = 120 * (1 - frameTarget);
+                const rot = 3 * (1 - frameTarget);
+                const blurVal = 1 * (1 - frameTarget);
+                layers.frame.style.transform = `translateX(-50%) translateY(${yOffset}px) rotate(${rot}deg)`;
+                layers.frame.style.filter = `blur(${blurVal}px)`;
+                layers.frame.style.opacity = 1 - (frameTarget * 0.4);
+            }
+            if (layers.motherboard) {
+                const yOffset = 250 * (1 - mbTarget);
+                const rot = 8 * (1 - mbTarget);
+                const blurVal = 3 * (1 - mbTarget);
+                layers.motherboard.style.transform = `translateX(-50%) translateY(${yOffset}px) rotate(${rot}deg)`;
+                layers.motherboard.style.filter = `blur(${blurVal}px)`;
+                layers.motherboard.style.opacity = 1 - (mbTarget * 0.5);
+            }
+            if (layers.back) {
+                const yOffset = -180 * (1 - backTarget);
+                const rot = -7 * (1 - backTarget);
+                const blurVal = 2 * (1 - backTarget);
+                layers.back.style.transform = `translateX(-50%) translateY(${yOffset}px) rotate(${rot}deg)`;
+                layers.back.style.filter = `blur(${blurVal}px)`;
+                layers.back.style.opacity = 1 - (backTarget * 0.6);
+            }
+            
+            if (scrollText) {
+                const percent = Math.floor(eased * 100);
+                if (percent < 30) scrollText.innerHTML = `🔩 分解状態: ${percent}% 組み立て中...`;
+                else if (percent < 70) scrollText.innerHTML = `⚙️ 基板実装中... ${percent}%`;
+                else if (percent < 95) scrollText.innerHTML = `📱 背面パネル取付中... ${percent}%`;
+                else scrollText.innerHTML = `✨ Xperia 完成！ ✨ スクロールを戻すと分解します`;
+            }
+        }
+        
+        initPositions();
+        window.addEventListener('scroll', updateTeardown);
+        window.addEventListener('resize', updateTeardown);
+        setTimeout(updateTeardown, 100);
+    })();
 </script>
 </body>
 </html>
